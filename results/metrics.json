@@ -1,0 +1,58 @@
+{
+  "source": "data/AAPL_stock_2015_2025.csv",
+  "ignored_non_date_header_rows": 1,
+  "input_rows_after_date_filter": 2516,
+  "feature_rows": 2496,
+  "train_rows": 1995,
+  "test_rows": 500,
+  "train_last_date": "2022-12-30",
+  "test_first_date": "2023-01-04",
+  "test_last_date": "2024-12-30",
+  "embargo_rows": 1,
+  "target": "next-day close-to-close percentage return",
+  "features": [
+    "MA5_ratio",
+    "MA20_ratio",
+    "Pct_change",
+    "Range",
+    "Lag1",
+    "Lag2",
+    "Lag3",
+    "Volume"
+  ],
+  "metrics": {
+    "ZeroReturnBaseline": {
+      "MAE_percentage_points": 1.009113,
+      "RMSE_percentage_points": 1.352741,
+      "R2": -0.012115
+    },
+    "TrainMeanBaseline": {
+      "MAE_percentage_points": 1.000736,
+      "RMSE_percentage_points": 1.345634,
+      "R2": -0.001508
+    },
+    "LinearRegression": {
+      "MAE_percentage_points": 1.018091,
+      "RMSE_percentage_points": 1.364379,
+      "R2": -0.029604
+    },
+    "DecisionTree": {
+      "MAE_percentage_points": 1.016989,
+      "RMSE_percentage_points": 1.37294,
+      "R2": -0.042566
+    },
+    "RandomForest": {
+      "MAE_percentage_points": 1.010615,
+      "RMSE_percentage_points": 1.355649,
+      "R2": -0.016471
+    },
+    "GradientBoosting": {
+      "MAE_percentage_points": 1.074493,
+      "RMSE_percentage_points": 1.423232,
+      "R2": -0.120345
+    }
+  },
+  "best_model_by_MAE": "RandomForest",
+  "beats_best_simple_baseline_by_MAE": false,
+  "notes": "One chronological holdout, not walk-forward CV. These results do not establish trading profitability. Check R2 and simple baselines before claiming predictive signal."
+}

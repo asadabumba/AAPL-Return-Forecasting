@@ -2,7 +2,7 @@
 
 **A reproducible educational ML project comparing four regression models on historical stock-market data.** Built from my first-year coursework on machine-learning methods for financial-asset analysis.
 
-> **Status:** Working experiment pipeline and automated tests. Real-data metrics must be rerun locally with the referenced AAPL CSV; this repository deliberately contains no third-party dataset or personal university paperwork. Not a trading system or investment advice.
+> **Status:** End-to-end experiment reproduced on the provided 2015–2024 AAPL CSV; local results, evaluation scripts, tests and CI included. The third-party price dataset itself is **not** redistributed. Educational research only — **not** a trading system or investment advice.
 
 ## At a glance
 
@@ -20,7 +20,26 @@
 
 Financial returns are noisy and hard to forecast. A small MAE by itself is **not** evidence of an effective prediction model; simple baselines can achieve similar results. This repository makes baselines and R² first-class outputs and keeps model selection separate from any claim of predictive or financial usefulness.
 
-The original course report describes an experiment with AAPL observations from 2015–2024 and reports Random Forest as the lowest-MAE model among its four candidates (approximately 1.01 percentage points). The accompanying report screenshot shows negative R² values; the old results therefore should **not** be interpreted as demonstrated predictive edge. These historical figures are documented coursework results, **not** outputs independently reproduced by this repository. The new pipeline must be run with the CSV before reporting updated scores.
+## Reproduced results on real AAPL data
+
+The experiment was **executed on the supplied CSV** (2,516 dated rows, 2015-01-02 through 2024-12-31), not on synthetic samples. Features produce 2,496 usable rows. Chronological evaluation uses **1,995 training rows, a 1-row embargo, and 500 test rows**. The main score table comes from the updated research implementation, not the original notebook.
+
+| Model | MAE (pp) ↓ | RMSE (pp) ↓ | R² ↑ |
+|---|---:|---:|---:|
+| **Training-mean baseline** | **1.0007** | **1.3456** | **−0.0015** |
+| Zero-return baseline | 1.0091 | 1.3527 | −0.0121 |
+| Random Forest | 1.0106 | 1.3556 | −0.0165 |
+| Decision Tree | 1.0170 | 1.3729 | −0.0426 |
+| Linear Regression | 1.0181 | 1.3644 | −0.0296 |
+| Gradient Boosting | 1.0745 | 1.4232 | −0.1203 |
+
+**Finding:** Random Forest has the lowest MAE *among the four ML regressors*, but **none of the ML models beats the training-mean baseline** on this single chronological holdout. All model R² values are negative. This is an important negative result, not a demonstrated forecast or trading edge.
+
+![Test-set AAPL returns and Random Forest predictions](results/forecast.png)
+
+[Read the reproducibility report](docs/reproduced-results.md) · [Machine-readable metrics](results/metrics.json) · [Model score CSV](results/model_metrics.csv) · [Residual chart](results/residuals.png) · [Random Forest feature importance](results/feature_importance.png)
+
+**Data:** The source CSV is not committed. This run used the same uploaded file as the coursework experiment; the PDF cites a Kaggle dataset, but independent provenance/redistribution rights have not been verified. See the report for the input checksum and environment details.
 
 ## Original coursework (public PDF)
 
@@ -92,11 +111,11 @@ Synthetic outputs are only smoke tests. **Do not describe them as AAPL results.*
 | `outputs/residuals.png` | Residuals on the chronological holdout |
 | `outputs/feature_importance.png` | Impurity-based feature importance for Random Forest (not causal evidence) |
 
-These outputs are local and excluded from Git by default. Once the real-data experiment is reproduced, a **curated, clearly labeled** results table and charts can be reviewed and added to the documentation.
+`outputs/` is local and Git-ignored. Selected metrics and figures from the real-data run are published under [`results/`](results/) for auditability. Individual daily predictions and the raw third-party price data are **not** distributed.
 
 ## What changed since my original coursework
 
-This is an **engineering rewrite** of my first-year university project, not a claim that the historical results were reproduced. It adds input validation, deterministic code, an sklearn scaling pipeline, an explicit one-row holdout boundary embargo, baseline regressors, R², automated tests, a CLI, machine-readable results, and CI.
+This is an **engineering rewrite** of my first-year university project. Its updated experiment was separately executed with the provided AAPL CSV and produced scores close to the original coursework, with a one-row boundary embargo and explicit baseline comparisons. It adds input validation, deterministic code, an sklearn scaling pipeline, an explicit one-row holdout boundary embargo, baseline regressors, R², automated tests, a CLI, machine-readable results, and CI.
 
 The public-edition [coursework PDF](docs/coursework.pdf) preserves the original printed code listing. The executable Python package here is a separate engineering rewrite: typesetting and line-break artifacts in the original report make its printed listing unsuitable for direct execution.
 
@@ -116,7 +135,8 @@ src/aapl_forecasting/       data loading, features, experiment CLI
 tests/                      data, leakage boundary and output tests
 scripts/                    synthetic CSV generator for smoke testing
 data/README.md              original data source and expected schema
-docs/                       original anonymized report, research notes, internship summary
+docs/                       anonymized coursework, reproducibility report, research notes
+results/                    checked-in aggregate metrics and curated plots (no source CSV)
 .github/workflows/ci.yml    automated lint and tests
 ```
 

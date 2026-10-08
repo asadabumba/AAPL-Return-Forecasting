@@ -1,0 +1,7 @@
+model,MAE_percentage_points,RMSE_percentage_points,R2
+ZeroReturnBaseline,1.009113,1.352741,-0.012115
+TrainMeanBaseline,1.000736,1.345634,-0.001508
+LinearRegression,1.018091,1.364379,-0.029604
+DecisionTree,1.016989,1.37294,-0.042566
+RandomForest,1.010615,1.355649,-0.016471
+GradientBoosting,1.074493,1.423232,-0.120345
