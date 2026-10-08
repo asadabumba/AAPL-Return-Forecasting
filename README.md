@@ -1,0 +1,111 @@
+# AAPL Return Forecasting — Classical ML Benchmark
+
+**A reproducible educational ML project comparing four regression models on historical stock-market data.** Built from my first-year coursework on machine-learning methods for financial-asset analysis.
+
+> **Status:** Working experiment pipeline and automated tests. Real-data metrics must be rerun locally with the referenced AAPL CSV; this repository deliberately contains no third-party dataset or personal university paperwork. Not a trading system or investment advice.
+
+## At a glance
+
+| | |
+|---|---|
+| **Problem** | Predict next trading day's close-to-close **percentage return**, not the absolute share price |
+| **Models** | Linear Regression · Decision Tree · Random Forest · Gradient Boosting |
+| **Baselines** | Predict zero return · Predict historical training-mean return |
+| **Features** | Moving-average ratios, returns, intraday range, three return lags, volume |
+| **Validation** | 80/20 chronological holdout, no shuffling, one-observation embargo |
+| **Metrics** | MAE, RMSE (percentage points), and R² |
+| **Stack** | Python, pandas, NumPy, scikit-learn, Matplotlib, pytest |
+
+## Why this is interesting
+
+Financial returns are noisy and hard to forecast. A small MAE by itself is **not** evidence of an effective prediction model; simple baselines can achieve similar results. This repository makes baselines and R² first-class outputs and keeps model selection separate from any claim of predictive or financial usefulness.
+
+The original course report describes an experiment with AAPL observations from 2015–2024 and reports Random Forest as the lowest-MAE model among its four candidates (approximately 1.01 percentage points). The accompanying report screenshot shows negative R² values; the old results therefore should **not** be interpreted as demonstrated predictive edge. These historical figures are documented coursework results, **not** outputs independently reproduced by this repository. The new pipeline must be run with the CSV before reporting updated scores.
+
+## Pipeline
+
+```mermaid
+flowchart LR
+    A[Daily AAPL OHLCV CSV] --> B[Validate and order by date]
+    B --> C[Create trailing indicators and return lags]
+    C --> D[Chronological split with 1-row embargo]
+    D --> E[Baselines and four regression models]
+    E --> F[MAE / RMSE / R2 evaluation]
+    F --> G[JSON / CSV / diagnostics]
+```
+
+Features are computed using data available **by the close of day t**. The target is the percentage close-to-close return from t to the next trading day. Models are fit on earlier dates and evaluated on later, unseen dates. `StandardScaler` is fit only inside the training pipeline for linear regression; tree-based models receive unscaled features.
+
+## Run locally
+
+Python **3.11+** required. Windows PowerShell examples:
+
+```powershell
+# In this repository's root directory:
+uv sync --python 3.13 --extra dev
+uv run --extra dev python -m pytest -q
+```
+
+Without `uv`, use Python and pip:
+
+```powershell
+python -m pip install -e ".[dev]"
+python -m pytest -q
+```
+
+Download the AAPL CSV referenced in [data/README.md](data/README.md), check its terms of use, and save it locally to `data/AAPL_stock_2015_2025.csv` (the `data/` files are Git-ignored).
+
+```powershell
+uv run python -m aapl_forecasting.experiment --csv data/AAPL_stock_2015_2025.csv --out outputs
+```
+
+**To verify the code without the real dataset**, use generated synthetic data:
+
+```powershell
+uv run python scripts/create_demo_csv.py
+uv run python -m aapl_forecasting.experiment --csv data/demo_synthetic.csv --out outputs/demo --start 2018-01-01 --end 2019-12-31
+```
+
+Synthetic outputs are only smoke tests. **Do not describe them as AAPL results.**
+
+## Outputs
+
+| File | What it contains |
+|---|---|
+| `outputs/metrics.json` | Dataset period, sample sizes, validation protocol, metrics, baseline comparison |
+| `outputs/predictions.csv` | Dates, actual returns and model predictions |
+| `outputs/forecast.png` | Best-MAE candidate and actual out-of-sample returns |
+| `outputs/residuals.png` | Residuals on the chronological holdout |
+| `outputs/feature_importance.png` | Impurity-based feature importance for Random Forest (not causal evidence) |
+
+These outputs are local and excluded from Git by default. Once the real-data experiment is reproduced, a **curated, clearly labeled** results table and charts can be reviewed and added to the documentation.
+
+## What changed since my original coursework
+
+This is an **engineering rewrite** of my first-year university project, not a claim that the historical results were reproduced. It adds input validation, deterministic code, an sklearn scaling pipeline, an explicit one-row holdout boundary embargo, baseline regressors, R², automated tests, a CLI, machine-readable results, and CI.
+
+The report's original listing is included in my private academic materials but is **not** copied blindly: several PDF line breaks and formatting artifacts make the printed listing unsuitable as a runnable source file.
+
+## Important limitations and next steps
+
+- Only one chronological holdout is currently used. **Walk-forward backtesting** and hyperparameter selection on prior validation windows are needed before drawing stronger conclusions.
+- Historical returns are noisy; negative R² or failure to beat a naive baseline should be reported openly.
+- Impurity-based feature importance does not prove causality or financial signal.
+- Results depend on the exact CSV vendor, adjustments, observation window, and cleaning rules.
+- No transaction costs, slippage, risk controls, or profitability analysis are included.
+- A future experiment may add time-series cross-validation, uncertainty estimates, and transaction-cost-aware baselines.
+
+## Repository structure
+
+```text
+src/aapl_forecasting/       data loading, features, experiment CLI
+tests/                      data, leakage boundary and output tests
+scripts/                    synthetic CSV generator for smoke testing
+data/README.md              original data source and expected schema
+docs/                       research notes and internship project summary
+.github/workflows/ci.yml    automated lint and tests
+```
+
+## Origin and license
+
+Adapted and expanded from my 2026 first-year coursework: *Development of Intelligent Algorithms for Asset Valuation and Price Forecasting*. The underlying historical dataset is third-party material and is not redistributed. Source code: MIT License.
