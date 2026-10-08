@@ -22,6 +22,20 @@ Financial returns are noisy and hard to forecast. A small MAE by itself is **not
 
 The original course report describes an experiment with AAPL observations from 2015–2024 and reports Random Forest as the lowest-MAE model among its four candidates (approximately 1.01 percentage points). The accompanying report screenshot shows negative R² values; the old results therefore should **not** be interpreted as demonstrated predictive edge. These historical figures are documented coursework results, **not** outputs independently reproduced by this repository. The new pipeline must be run with the CSV before reporting updated scores.
 
+## Original coursework (public PDF)
+
+[**Read the anonymized coursework report (PDF, 27 pages)**](docs/coursework.pdf)
+
+This is a public portfolio edition of my 2026 Russian-language university coursework.
+The original signed university title/assignment pages were removed and replaced
+with an English cover and research overview. **The original research body,
+figures, calculations, references, and printed Python listing (pages 3-27)
+were preserved without modification.**
+
+The report's historical model scores are **not** new, independently reproduced
+results of this GitHub codebase. The repository provides a separate engineering
+rewrite with more explicit baseline comparisons, validation, tests, and CLI.
+
 ## Pipeline
 
 ```mermaid
@@ -84,7 +98,7 @@ These outputs are local and excluded from Git by default. Once the real-data exp
 
 This is an **engineering rewrite** of my first-year university project, not a claim that the historical results were reproduced. It adds input validation, deterministic code, an sklearn scaling pipeline, an explicit one-row holdout boundary embargo, baseline regressors, R², automated tests, a CLI, machine-readable results, and CI.
 
-The report's original listing is included in my private academic materials but is **not** copied blindly: several PDF line breaks and formatting artifacts make the printed listing unsuitable as a runnable source file.
+The public-edition [coursework PDF](docs/coursework.pdf) preserves the original printed code listing. The executable Python package here is a separate engineering rewrite: typesetting and line-break artifacts in the original report make its printed listing unsuitable for direct execution.
 
 ## Important limitations and next steps
 
@@ -102,7 +116,7 @@ src/aapl_forecasting/       data loading, features, experiment CLI
 tests/                      data, leakage boundary and output tests
 scripts/                    synthetic CSV generator for smoke testing
 data/README.md              original data source and expected schema
-docs/                       research notes and internship project summary
+docs/                       original anonymized report, research notes, internship summary
 .github/workflows/ci.yml    automated lint and tests
 ```
 
