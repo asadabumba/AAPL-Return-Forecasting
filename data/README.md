@@ -1,7 +1,9 @@
 # Local-only datasets
 
 **Do not commit real datasets or personal files here.** The public repository
-intentionally ships without stock-price data or the university PDF.
+does not redistribute third-party stock-price data. It includes an anonymized
+portfolio edition of the coursework at `docs/coursework.pdf`; the original
+signed university pages and identifying paperwork are not published.
 
 Download an appropriate AAPL daily OHLCV dataset from a licensed source and
 save it as `data/AAPL_stock_2015_2025.csv`. The original university coursework

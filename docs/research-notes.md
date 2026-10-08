@@ -8,7 +8,7 @@ The first-year coursework was written for the course *Fundamentals of Machine Le
 
 The original report presents an AAPL dataset for approximately 2015–2024. Its model-comparison table lists MAE about **1.010 percentage points** for Random Forest, slightly below the other candidate models. R² values shown in the report are negative. That means reported out-of-sample performance cannot justify a claim of strong prediction and motivates explicit naive baselines in the rewritten implementation.
 
-We do not ship the original report here because it contains identifying academic information, signatures, and scanned pages. The original source code excerpt was formatted for print and contains line wraps unsuitable for direct execution. The rewritten code is reproducible *once the underlying input CSV is provided* but must not be represented as the exact unchanged original pipeline.
+The repository includes an **anonymized portfolio edition** of the coursework at [`docs/coursework.pdf`](coursework.pdf). The original signed title/assignment pages and personal academic information are **not** published. The research body remains the original coursework text. Its printed source-code listing contains line wraps unsuitable for direct execution. The executable package is a separately engineered implementation; the main experiment has also been rerun on the supplied original CSV, with a one-row holdout-boundary embargo and explicit baselines (see [`reproduced-results.md`](reproduced-results.md)). Do not present the updated pipeline as an exact, unchanged copy of the historical notebook.
 
 ## Improvements introduced by this repository
 
